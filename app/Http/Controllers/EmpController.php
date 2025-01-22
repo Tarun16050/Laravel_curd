@@ -14,9 +14,12 @@ class EmpController extends Controller
     public function index()
     {
         $web =  Employee::all();
+        $join = Employee::join('tasks', 'employees.task_id', '=', 'tasks.id')
+            ->select('employees.*', 'tasks.task','tasks.description')
+            ->paginate(5);
 
         // return $web;
-        return view('emp.index',compact('web'));
+        return view('emp.index',compact('web','join'));
 
     }
 

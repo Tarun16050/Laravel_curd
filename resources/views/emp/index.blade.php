@@ -87,6 +87,55 @@
         </div>
     </div>
 
+    {{-- Join Table  --}}
+    <div class="container mt-3 border border-rounded border-black">
+        <div class="row mt-3">
+            <div class="col-md-10">
+                <h2>Employee Details</h2>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile No.</th>
+                    <th>City</th>
+                    <th>Age</th>
+                    <th>Salary</th>
+                    <th>Designation</th>
+                    <th>Task Name </th>
+                    <th>task Description</th>
+                    <th>Photo</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($join as $value)
+                    <tr>
+                        <td>{{ $value->id }}</td>
+                        <td>{{ $value->name }}</td>
+                        <td>{{ $value->email }}</td>
+                        <td>{{ $value->phone }}</td>
+                        <td>{{ $value->City }}</td>
+                        <td>{{ $value->age }}</td>
+                        <td>{{ $value->salary }}</td>
+                        <td>{{ $value->designation }}</td>
+                        <td>{{ $value->task }}</td>
+                        <td>{{ $value->description }}</td>
+                        <td>
+                            <img src="{{asset('/storage/'.$value->photo)}}" alt="{{ $value->name }}_photo" width="50px" height="50px">
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <div class="mt-5">
+            {{ $join->links('pagination::bootstrap-5') }}
+        </div>
+    </div>
+
 </body>
 
 </html>
