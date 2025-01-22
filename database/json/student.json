@@ -1,0 +1,12 @@
+[
+    { "name": "John Doe", "city": "New York", "email": "john.doe@example.com" },
+    { "name": "Jane Smith", "city": "Los Angeles", "email": "jane.smith@example.com" },
+    { "name": "Michael Brown", "city": "Chicago", "email": "michael.brown@example.com" },
+    { "name": "Emily Davis", "city": "Houston", "email": "emily.davis@example.com" },
+    { "name": "David Wilson", "city": "Phoenix", "email": "david.wilson@example.com" },
+    { "name": "Sophia Martinez", "city": "Philadelphia", "email": "sophia.martinez@example.com" },
+    { "name": "James Garcia", "city": "San Antonio", "email": "james.garcia@example.com" },
+    { "name": "Olivia Anderson", "city": "San Diego", "email": "olivia.anderson@example.com" },
+    { "name": "Liam Taylor", "city": "Dallas", "email": "liam.taylor@example.com" },
+    { "name": "Isabella Moore", "city": "San Jose", "email": "isabella.moore@example.com" }
+  ]
