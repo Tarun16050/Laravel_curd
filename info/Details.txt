@@ -1,0 +1,266 @@
+1) Download Composer And Install
+2) Install Laravel global (composer global require laravel/installer)
+   - not global (composer create-project laravel/laravel example-app)
+3) create Project in xampp/wampp (laravel new example-app)
+===================================================================
+run project : php artisan serve
+===================================================================
+Set MYSQL Database
+ change the data in .env file (C:\wamp64\www\laravelCURD\.env)
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=learn_laravel
+    DB_USERNAME=root
+    DB_PASSWORD=
+
+    SESSION_DRIVER=file
+    CACHE_STORE=file
+
+chnage the data in database.php file  (C:\wamp64\www\laravelCURD\config\database.php) in ('mysql' => [])
+    'engine' => 'InnoDB',
+===================================================================
+laravel extension in vs code
+• PHP IntelliSense (Damjan Cvetko)
+• PHP Namespace Resolver (Mehedi Hassan)
+• Laravel Extra Intellisense (amir)
+• laravel-blade (Christian Howe)
+• Laravel Blade Snippets (Winnie Lin)
+• Laravel goto view (codingyu)
+====================================================================
+ file structure :
+ controller : app/http/controler /
+ model : app/http/model /
+ views :resources/ views/
+ assets:public/
+ routes : routes/web.php
+====================================================================
+ Routing Basics: routes/web.php
+	Route::get( /urlname',function ( ) {return view( 'htmlfilename');});
+	Route::get( /urlname',return "<h1>heello</h1>";});
+	Route::view('urlname' , ' "filename");
+	Route::get('/urlname/{id}', function (string $id) {return 'User ' . $id;});
+	Route::get('/urlname/{id}', function (string $id) {return "<h1> hello rollno. : ".$id."</h1>";});
+	Route::git('/yrlname/{$id?}',function (string $id = null) {
+		if($id){return "<h1> hello rollno. : ".$id."</h1>";}else{"NO ID "}
+	});
+	Route::git('/urlname/{$id?}',function (string $id) {
+		if($id){
+				return "<h1>Tarun  ID : ".$id."</hl>" ;
+		}else{
+			return "<h1>No ID Found</hl>";
+		}
+	))->whereNumber('id') ;
+
+ Named Routes :
+	Route::get( /urlname',function ( ) {return view( 'htmlfilename');})->name('as_you_wish');  // name ko hi a tack me use karna he ({{route('as_you_wish')}})
+
+	Route::redirect( '/about','/test') ;
+	Route::redirect( '/about','/test',301) ; //paemanent
+
+ Group Route :
+    Route::prefix('page')->group(function () {
+		Route::get( /urlname',function ( ) {return view( 'htmlfilename');});
+		Route::get( /urlname',function ( ) {return view( 'htmlfilename');});
+		Route::get( /urlname',function ( ) {return view( 'htmlfilename');});
+	});
+
+ not pahe found:
+	Route::fallback(function(){ return "<h1>Page not Found </h1>";});
+***************************************************************************
+Route Command :
+	•php artisan route -h   (all route command)
+	•php artisan route:list(all route list)
+	•php artisan route:list --except-vendor(only we are create route list)
+	•php artisan route:list --path=tarun
+=======================================================================
+Blade Template Main Directives :
+		• @include
+		• @section
+		. @extend
+		• @yield
+=========================================================================
+Laravel Database Migration : (Projectfolder/database/migrations/)
+    php artisan make:migration create_students_table
+
+run cammand : php artisan migrate
+  rollback : php artisan migrate: rollback
+            php artisan migrate: rollback --batch=3   // 3 no  ki specific no ko undo
+            php artisan migrate: rollback --step=3  // last ki 3 ko undo
+            php artisan migrate:reset   // reset all the tables remove
+            php artisan migrate: fresh  // all remove and add all migration tables
+
+Migration Modifiers & Constraints :
+                php artisan make:migration update_students_table —table-students
+        example :
+                $table->renameColumn('from', 'to');
+                $table->dropColumn('city');
+                $table->dropColumn(['city', 'avatar', 'location']);
+                $table->string('name', 50)->change();
+                $table->integer('votes')->unsigned()->default(l)->comment('my comment')->change();
+
+
+CReate Model and Migration (Both)file :
+                php artisan make:model tableName -m
+
+==============================================================================================
+Laravel Database Seeders :
+    There Are 5 Steps of using Seeders :
+        1. make model file (php artisan make:model student)
+        2. maake seeder file (php artisan make:seeder StudentSeeder)
+        3. code of seeder file
+        4. add seeder in Seeders/DatabaseSeeder.php and code the add seeder file
+        5. run the seeder file
+
+    php artisan make:model student
+    php artisan make:seeder StudentSeeder
+
+    kon si file ko run karna he uske liye (Seeders/DatabaseSeeder.php) is file me add karna hota he
+
+    Seeders file run cammand : php artisan db:seed
+
+    only one seeder file run Command : php artisan db:seed --class=StudentSeeder
+
+    Fker website link : https://fakerphp.org/
+================================================================================================
+Laravel Model Factory  :
+        There Are 5 Steps of using Factory :
+            1. make model file (php artisan make:model student)
+            2. maake factory file (php artisan make:factory StudentFactory)
+            3. code of factory file
+            4. add factory in Seeders/DatabaseSeeder.php and code the add factory file
+            5. run the factory file (php artisan db:seed)
+        1.  php artisan make:model student
+        2.  php artisan make:factory StudentFactory
+        3. class StudentFactory extends Factory
+                {
+                    public function definition(): array
+                    {
+                        return [
+                            'name' fake()->name(),
+                            'email' => fake()->email()
+                        ];
+                    }
+                }
+
+        4. Seeders/DatabaseSeeder.php file change
+                use App\Models\student;
+                student::factory()->count(5)->create();
+        5. php artisan db:seed
+---------------------------------------------
+create Factory abd model both :
+    php artisan make:factory StudentFactory --model=Student
+======================================================
+run cammand of both Migration and Seeding or factory :
+    php artisan migrate: fresh --seed
+                  or
+    php artisan make:model student -f
+================================================================================================
+Create Model file :
+                php artisan make:model tableName
+==============================================================================================
+Create Model & Controllers files:
+                php artisan make:model user --controller
+                ------------OR-------------------------------------
+                php artisan make:model user --controller --resource
+================================================================================================
+Resource controller :
+		    php artisan make:controller UserController --resource
+
+            use App\Http\Controllers\UserController;
+            Route::resource('users', UserController::class);
+==============================================================================================
+Pagination:
+Pagination Methods :
+     1. Paginate()       : DB::table('users')->paginate(5)
+     2. simplePaginate() : DB::table('users')->simplePaginate(5)
+     3. cursorPaginate() : DB::table('users')->orderBy('id')->cursorPaginate(5)
+    in Blade file Changes :
+        {{ $data->links() }} OR  {{ $data->links('pagination::bootstrap-5')}}
+
+    if css issues so
+    changes this file App\Providers\AppServiceProvider class:
+    use Illuminate\Pagination\Paginator;
+        Paginator::useBootstrapFive();
+        Paginator::useBootstrapFour();
+==============================================================================================
+Validation:
+$request->validate([
+            'name' => 'required | max:255 | min:3 | string | alpha',
+            'email' => 'required | email',
+            'photo' => 'required | image | mimes:jpeg,png,jpg,gif,svg | max:2048',
+        ]);
+     ---------------OR---------------------
+     $request->validate([
+            'name' => 'required | max:255 | min:3 | string | alpha',
+            'email' => 'required | email',
+            'photo' => 'required | image | mimes:jpeg,png,jpg,gif,svg | max:2048',
+        ],
+        [
+            name.required => 'Name is Required',
+        ]);
+
+file check karna ho to :C:\wamp64\www\laravelCURD\vendor\laravel\framework\src\Illuminate\Translation\lang\en\validation.php
+
+custom from validation :
+                php artisan make:request ModelnameRequest
+
+                1. authention ko true karo
+                2. rule function me validation likh do
+
+                3.main file me ModelnameRequest se call kar do ex .   public function store(ModelnameRequest $request)
+            -------------------------------------------------
+                4. custom message likhana ho to messages() function bana ke uske under likh sakte he
+            ----------------------------------------------
+                5. custom attribute change karna ho to attribute() function bana ke name likh do
+------------------------------------------------------------------------------------------------
+Create new rule of validation :
+                php artisan make:rule RuleName
+
+                1.file me jistype ka rule chahiye create karke message likhege
+                 ex:
+                        public function validate(string $attribute, mixed $value, Closure $fail): void
+                        {
+                            if(strtoupper($value) == $value){
+                                $fail('The :attribute is must be Uppre Case.');
+                            }
+                        }
+                2. jaha par use use karana he vaha par add kare line :  use App\rule\RuleName
+                3. jis attribute me add karna vo ha ex: 'City' => ['required', new RuleName],
+===============================================================================================
+
+
+Datatypes in MySQL :
+    String Data Types:
+        CHAR(size): Fixed length, size ranges from 0 to 255 characters.
+        VARCHAR(size): Variable length, size ranges from 0 to 65,535 characters (depending on row size and character set).
+        BINARY(size): Fixed-length binary data, size ranges from 0 to 255 bytes.
+        VARBINARY(size): Variable-length binary data, size ranges from 0 to 65,535 bytes.
+        TINYTEXT: Up to 255 characters.
+        TEXT(size): Up to 65,535 bytes.
+        MEDIUMTEXT: Up to 16,777,215 characters.
+        LONGTEXT: Up to 4,294,967,295 characters.
+
+    Binary Data Types:
+        TINYBLOB: Up to 255 bytes.
+        BLOB(size): Up to 65,535 bytes.
+        MEDIUMBLOB: Up to 16,777,215 bytes.
+        LONGBLOB: Up to 4,294,967,295 bytes.
+
+    Numeric Data Types:
+        BIT(size): Stores bit values; size ranges from 1 to 64 bits.
+        TINYINT(size): Stores integer values from -128 to 127 (signed) or 0 to 255 (unsigned).
+        SMALLINT(size): Stores integer values from -32,768 to 32,767 (signed) or 0 to 65,535 (unsigned).
+        MEDIUMINT(size): Stores integer values from -8,388,608 to 8,388,607 (signed) or 0 to 16,777,215 (unsigned).
+        INT(size) or INTEGER(size): Stores integer values from -2,147,483,648 to 2,147,483,647 (signed) or 0 to 4,294,967,295 (unsigned).
+        BIGINT(size): Stores integer values from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807 (signed) or 0 to 18,446,744,073,709,551,615 (unsigned).
+        BOOL or BOOLEAN: Stores 0 (false) or 1 (true).
+        FLOAT(p): Approximate floating-point values; precision is defined by p.
+        DOUBLE(size, d) or REAL: Stores floating-point values with higher precision. For example, DOUBLE(10, 2) stores up to 10 digits, with 2 after the decimal point.
+        DECIMAL(size, d) or DEC(size, d): Fixed-point values with precision defined by size (total digits) and d (digits after the decimal). For example, DECIMAL(60, 30) allows 60 digits in total, with 30 after the decimal point.
+
+=================================================================================================================================================================
+->toSql se query dekh sakte he
+=================================================================================================================================================================
+
+
