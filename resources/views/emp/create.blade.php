@@ -20,7 +20,7 @@
                 </ul>
             </div>
         @endif --}}
-        <form action="{{ route('emp.store') }}" method="POST">
+        <form action="{{ route('emp.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('POST')
             <div class="row">

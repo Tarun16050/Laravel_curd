@@ -42,33 +42,36 @@ class EmpController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'name' => 'required | max:255 | min:3 | string | alpha',
-        //     'email' => 'required | email',
-        //     'phone' => 'required | numeric',
-        //     'address' => 'required  | string',
-        //     'City' => 'required | string',
-        //     'age' => 'required | numeric | min:18 | max:60',
-        //     // 'photo' => 'required | image | mimes:jpeg,png,jpg,gif,svg | max:2048',
-        //     'salary' => 'required | numeric',
-        //     'designation' => 'required | string',
-        //     'password' => 'required | min:8 ',
-        //     // 'confirm_password' => 'required | same:password | min:8',
-        // ],
-        // [
-        //     'name.required' => 'Name is required',
-        //     'email.required' => 'Email is required',
-        //     'phone.required' => 'Phone is required',
-        //     'address.required' => 'Address is required',
-        //     'City.required' => 'City is required',
-        //     'age.required' => 'Age is required',
-        //     'photo.required' => 'Photo is required',
-        //     'salary.required' => 'Salary is required',
-        //     'designation.required' => 'Designation is required',
-        //     'password.required' => 'Password is required',
-        //     // 'confirm_password.required' => 'Confirm Password is required',
-        // ]);
-
+        $request->validate([
+            'name' => 'required | max:255 | min:3 | string | alpha',
+            'email' => 'required | email',
+            'phone' => 'required | numeric',
+            'address' => 'required  | string',
+            'City' => 'required | string',
+            'age' => 'required | numeric | min:18 | max:60',
+            'photo' => 'required | image | mimes:jpeg,png,jpg,gif,svg | max:2048',
+            'salary' => 'required | numeric',
+            'designation' => 'required | string',
+            'password' => 'required | min:8 ',
+            // 'confirm_password' => 'required | same:password | min:8',
+        ],
+        [
+            'name.required' => 'Name is required',
+            'email.required' => 'Email is required',
+            'phone.required' => 'Phone is required',
+            'address.required' => 'Address is required',
+            'City.required' => 'City is required',
+            'age.required' => 'Age is required',
+            'photo.required' => 'Photo is required',
+            'salary.required' => 'Salary is required',
+            'designation.required' => 'Designation is required',
+            'password.required' => 'Password is required',
+            // 'confirm_password.required' => 'Confirm Password is required',
+        ]);
+        $file_name = time().'_'.$request->file('photo')->getClientOriginalName();
+        // $path = $request->file('photo')->store('employee_photos', 'public');
+        // $path = $request->file('photo')->move(public_path('employee_photos'), $file_name);
+        $path = $request->file('photo')->storeAs('employee_photos', $file_name, 'public');
         $data = Employee::create(
             [
                 'name' => $request->name,
@@ -81,7 +84,8 @@ class EmpController extends Controller
                 'salary' => $request->salary,
                 'designation' => $request->designation,
                 'password' => bcrypt($request->password),
-                'status'=>'1'
+                'status'=>'1',
+                'photo' => $path,
             ]
         );
         return redirect()->route('emp.index')->with('success', 'Employee created successfully.');
@@ -111,6 +115,39 @@ class EmpController extends Controller
     public function update(Request $request, string $id)
     {
         $data = Employee::find($id);
+        // $request->validate([
+        //     'name' => 'required | max:255 | min:3 | string | alpha',
+        //     'email' => 'required | email',
+        //     'phone' => 'required | numeric',
+        //     'address' => 'required  | string',
+        //     'City' => 'required | string',
+        //     'age' => 'required | numeric | min:18 | max:60',
+        //     'salary' => 'required | numeric',
+        //     'designation' => 'required | string',
+        //     'status' => 'required | numeric',
+        // ],
+        // [
+        //     'name.required' => 'Name is required',
+        //     'email.required' => 'Email is required',
+        //     'phone.required' => 'Phone is required',
+        //     'address.required' => 'Address is required',
+        //     'City.required' => 'City is required',
+        //     'age.required' => 'Age is required',
+        //     'salary.required' => 'Salary is required',
+        //     'designation.required' => 'Designation is required',
+        //     'status.required' => 'Status is required',
+        // ]);
+        // $path = $request->file('photo')->store('employee_photos', 'public');
+
+        if($request->hasFile('photo')){
+            $img_path = public_path('storage/'.$data->photo);
+            if (file_exists($img_path)) {
+                unlink($img_path);
+            }
+            $path = $request->file('photo')->store('employee_photos', 'public');
+        }else{
+            $path = $data->photo;
+        }
         $data->update(
             [
                 'name' => $request->name,
@@ -122,6 +159,7 @@ class EmpController extends Controller
                 'salary' => $request->salary,
                 'designation' => $request->designation,
                 'status' => $request->status ?? 1,
+                'photo' => $path,
             ]
         );
         return redirect()->route('emp.index')->with('success', 'Employee updated successfully.');
@@ -135,6 +173,10 @@ class EmpController extends Controller
         // Employee::destroy($id);
         $item = Employee::find($id);
         $item->delete();
+        $img_path = public_path('storage/'.$item->photo);
+        if (file_exists($img_path)) {
+            unlink($img_path);
+        }
         return redirect()->route('emp.index')->with('success', 'Employee deleted successfully.');
     }
 }

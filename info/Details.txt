@@ -170,6 +170,14 @@ Resource controller :
             use App\Http\Controllers\UserController;
             Route::resource('users', UserController::class);
 ==============================================================================================
+PHOTO :
+
+        $file_name = time().'_'.$request->file('photo')->getClientOriginalName();
+        // $path = $request->file('photo')->store('employee_photos', 'public');
+        $path = $request->file('photo')->storeAs('employee_photos', $file_name, 'public');
+
+     php artisan storage:link           //showing image for user to public folder
+===============================================================================================
 Pagination:
 Pagination Methods :
      1. Paginate()       : DB::table('users')->paginate(5)

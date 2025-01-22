@@ -11,7 +11,7 @@
 <body>
     <div class="container mt-3">
         <h2>Employee Form</h2>
-        <form action="{{ route('emp.update',$data->id) }}" method="POST">
+        <form action="{{ route('emp.update',$data->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="row">
@@ -69,10 +69,24 @@
                         <input type="text" class="form-control" id="designation" name="designation" value="{{ $data->designation }}">
                     </div>
                 </div>
+                {{-- <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="photo" class="form-label">Photo</label>
+                        <input type="file" class="form-control img-thumbnail img-fluid" id="photo" name="photo" value="{{ $data->photo }}"
+                        onchange="document.queryselector('#photooutput').src=window.URL.createObjectURL(this.files[0])">
+                    </div>
+                    <div>
+                        <img class="img-thumbnail img-fluid" id="photooutput" src="{{asset('/storage/'.$data->photo)}}" alt="{{ $data->name }}_photo" width="50px" height="50px">
+                    </div>
+                </div> --}}
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="photo" class="form-label">Photo</label>
-                        <input type="file" class="form-control" id="photo" name="photo" value="{{ $data->photo }}">
+                        <input type="file" class="form-control img-thumbnail img-fluid" id="photo" name="photo" value="{{ $data->photo }}"
+                        onchange="document.querySelector('#photooutput').src = window.URL.createObjectURL(this.files[0])">
+                    </div>
+                    <div>
+                        <img class="img-thumbnail img-fluid" id="photooutput" src="{{ asset('/storage/' . $data->photo) }}" alt="{{ $data->name }}_photo" width="50" height="50">
                     </div>
                 </div>
             </div>

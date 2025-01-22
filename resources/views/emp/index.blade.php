@@ -40,7 +40,7 @@
                     <th>Age</th>
                     <th>Salary</th>
                     <th>Designation</th>
-                    {{-- <th>Photo</th> --}}
+                    <th>Photo</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -55,7 +55,11 @@
                         <td>{{ $value->age }}</td>
                         <td>{{ $value->salary }}</td>
                         <td>{{ $value->designation }}</td>
-                        {{-- <td>{{ $value->photo }}</td> --}}
+                        <td>
+                            {{-- {{ $value->photo }} --}}
+                            <img src="{{asset('/storage/'.$value->photo)}}" alt="{{ $value->name }}_photo" width="50px" height="50px">
+
+                        </td>
                         {{-- <td>
                             <a href="{{ route('emp.show', $value->id) }}" class="btn btn-primary">View</a>
                             <a href="{{ route('emp.edit', $value->id) }}" class="btn btn-secondary">Edit</a>
